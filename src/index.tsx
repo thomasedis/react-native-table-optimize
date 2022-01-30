@@ -1,15 +1,5 @@
 
-import { Text, View } from 'react-native';
-import React from 'react';
-
-export function multiply(a: number, b: number): Promise<number> {
-  return Promise.resolve(a * b);
-}
-
-export function ViewDemo() {
-  return (
-    <View>
-      <Text>Hello I'm Thomas</Text>
-    </View>
-  );
-}
+export { default as TableWrap } from './components/TableWrap';
+export { default as TableHead } from './components/TableHead';
+export { default as TableBody } from './components/TableBody';
+// export { default as TableRow } from './components/TableRow';
