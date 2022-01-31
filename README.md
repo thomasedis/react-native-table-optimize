@@ -1,612 +1,651 @@
 # React Native Table Optimize 🇻🇳
 
-[![Version](https://img.shields.io/npm/v/react-native-table-optimize.svg)](https://www.npmjs.com/package/react-native-table-optimize)
-[![Build Status](https://travis-ci.org/wix/react-native-table-optimize.svg?branch=master)](https://travis-ci.org/wix/react-native-table-optimize)
 <p align="center">
   <a href="https://www.npmjs.com/package/react-native-table-optimize"><img src="https://badge.fury.io/js/react-native-table-optimize.svg" /></a>
   <a href="https://www.npmjs.com/package/react-native-table-optimize"><img src="https://img.shields.io/badge/platform-Android%20%7C%20iOS-yellow.svg" /></a>
   <a href="https://www.npmjs.com/package/react-native-table-optimize"><img src="https://img.shields.io/npm/dm/react-native-table-optimize.svg?colorB=orange" /></a>
+  <a href="https://www.npmjs.com/package/react-native-table-optimize"><img src="https://travis-ci.org/wix/react-native-table-optimize.svg?branch=master" /></a>
 </p>
-This module includes various customizable **React-Native** calendar components.
+Makes it easy to display data in tabular form and you can completely customize it flexibly.
 
 The package is both **Android** and **iOS** compatible.
 
 ## Try it out
 
-You can run example module by performing these steps:
+|                                                                                               |                                                                                           |
+| :-------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------: |
+| ![](https://github.com/thomasedis/react-native-table-optimize/tree/master/src/images/demo_android.gif?raw=true) | ![](https://github.com/thomasedis/react-native-table-optimize/tree/master/src/images/demo_ios.gif?raw=true) |
 
-```
-$ git clone git@github.com:wix/react-native-calendars.git
-$ cd react-native-calendars
-$ npm install
-$ cd ios && pod install && cd ..
-$ react-native run-ios
-```
+Have a look at the [examples below](https://github.com/Purii/react-native-table-optimize#examples)! :-)
 
-You can check example screens source code in [example module screens](https://github.com/wix-private/wix-react-native-calendar/tree/master/example/src/screens)
-
-This project is compatible with Expo/CRNA (without ejecting), and the examples have been [published on Expo](https://expo.io/@community/react-native-calendars-example)
+- [Installation](#installation)
+- [Extensible](#extensible)
+- [Props](#props): [`TableView`](#tableview) [`Cell`](#cell) [`Section`](#section) [`Separator`](#separator)
+- [Examples](#examples)
+- [Try it out](#try-it-out)
 
 ## Installation
 
+1.  _Install as dependency:_
+
+```sh
+// yarn
+yarn add react-native-table-optimize
+// or npm
+npm i react-native-table-optimize
 ```
-$ npm install --save react-native-calendars
-```
 
-The solution is implemented in JavaScript so no native module linking is required.
-
-## Usage
-
-`import {`[Calendar](#calendar), [CalendarList](#calendarlist), [Agenda](#agenda)`} from 'react-native-calendars';`
-
-All parameters for components are optional. By default the month of current local date will be displayed.
-
-Event handler callbacks are called with `calendar objects` like this:
+2.  _Add needed components:_
 
 ```javascript
-{
-  day: 1,      // day of month (1-31)
-  month: 1,    // month of year (1-12)
-  year: 2017,  // year
-  timestamp,   // UTC timestamp representing 00:00 AM of this date
-  dateString: '2016-05-13' // date formatted as 'YYYY-MM-DD' string
-}
+import { TableWrap, TableHead, TableBody, TableRow } from 'react-native-table-optimize';
 ```
 
-Parameters that require date types accept `YYYY-MM-DD` formatted `date-strings`, JavaScript date objects, `calendar objects` and `UTC timestamps`.
+## Extensible
 
-Calendars can be localized by adding custom locales to `LocaleConfig` object:
+`react-native-table-optimize` provides you with some predefined CSS-styles, inspired by the native TableView.
+You can always mix the `Cell`-instances inside a `Section`, with other (React-Native)-Views.
 
-```javascript
-import {LocaleConfig} from 'react-native-calendars';
+### Override defaults of `Cell`-Component
 
-LocaleConfig.locales['fr'] = {
-  monthNames: [
-    'Janvier',
-    'Février',
-    'Mars',
-    'Avril',
-    'Mai',
-    'Juin',
-    'Juillet',
-    'Août',
-    'Septembre',
-    'Octobre',
-    'Novembre',
-    'Décembre'
-  ],
-  monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
-  dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
-  dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
-  today: "Aujourd'hui"
+Don't repeat yourself.
+If you override the default props over and over again, just pass them as an object.
+
+```jsx
+const cellPropsCustom = {
+  cellStyle: 'Basic',
+  title: 'Basic Custom',
+  backgroundColor: 'black',
 };
-LocaleConfig.defaultLocale = 'fr';
+<Cell onPress={console.log} {...cellPropsCustom} />
+<Cell onPress={console.log} {...cellPropsCustom} />
 ```
 
-### Calendar
+### Separator BackgroundColor is derived from Cell BackgroundColor
 
-<kbd>
-  <img src="https://github.com/wix-private/wix-react-native-calendar/blob/master/demo/assets/calendar.gif?raw=true">
-</kbd>
+The `Separator`-Component is a line from the left end to the right end.
+According to the original iOS TableView there should be an insent on the left end.
+This is done by separating the `Separator`-Component in two parts: `SeparatorContainer` (full width) and `SeparatorInner` (width - inset). (See: [`Separator.tsx`](/src/components/Separator.tsx))
+The `SeparatorContainer` has the same color that the `Cell`-Component above.
+The `SeparatorInner` has the default Separator Color.
+Pressing a Cell Component will change the color of `SeparatorInner` to `transparent`.
 
-#### Basic parameters
+#### Why is that so complicated?
 
-```javascript
-<Calendar
-  // Initially visible month. Default = now
-  current={'2012-03-01'}
-  // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-  minDate={'2012-05-10'}
-  // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-  maxDate={'2012-05-30'}
-  // Handler which gets executed on day press. Default = undefined
-  onDayPress={day => {
-    console.log('selected day', day);
-  }}
-  // Handler which gets executed on day long press. Default = undefined
-  onDayLongPress={day => {
-    console.log('selected day', day);
-  }}
-  // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-  monthFormat={'yyyy MM'}
-  // Handler which gets executed when visible month changes in calendar. Default = undefined
-  onMonthChange={month => {
-    console.log('month changed', month);
-  }}
-  // Hide month navigation arrows. Default = false
-  hideArrows={true}
-  // Replace default arrows with custom ones (direction can be 'left' or 'right')
-  renderArrow={direction => <Arrow />}
-  // Do not show days of other months in month page. Default = false
-  hideExtraDays={true}
-  // If hideArrows = false and hideExtraDays = false do not switch month when tapping on greyed out
-  // day from another month that is visible in calendar page. Default = false
-  disableMonthChange={true}
-  // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday
-  firstDay={1}
-  // Hide day names. Default = false
-  hideDayNames={true}
-  // Show week numbers to the left. Default = false
-  showWeekNumbers={true}
-  // Handler which gets executed when press arrow icon left. It receive a callback can go back month
-  onPressArrowLeft={subtractMonth => subtractMonth()}
-  // Handler which gets executed when press arrow icon right. It receive a callback can go next month
-  onPressArrowRight={addMonth => addMonth()}
-  // Disable left arrow. Default = false
-  disableArrowLeft={true}
-  // Disable right arrow. Default = false
-  disableArrowRight={true}
-  // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
-  disableAllTouchEventsForDisabledDays={true}
-  // Replace default month and year title with custom one. the function receive a date as parameter
-  renderHeader={date => {
-    /*Return JSX*/
-  }}
-  // Enable the option to swipe between months. Default = false
-  enableSwipeMonths={true}
-/>
-```
+Because just hiding the separator would make the height of the component jump.
 
-#### Date marking
+## Props
 
-**Disclaimer**: Make sure that `markedDates` param is immutable. If you change `markedDates` object content but the reference to it does not change calendar update will not be triggered.
+- [`TableView`](#tableview)
+- [`Cell`](#cell)
+- [`Section`](#section)
+- [`Separator`](#separator)
 
-Dot marking
+### `TableView`
 
-<kbd>
-  <img height=50 src="https://github.com/wix-private/wix-react-native-calendar/blob/master/demo/assets/marking1.png?raw=true">
-</kbd>
-<p></p>
+The `TableView` component controls the theme.
 
-```javascript
-<Calendar
-  // Collection of dates that have to be marked. Default = {}
-  markedDates={{
-    '2012-05-16': {selected: true, marked: true, selectedColor: 'blue'},
-    '2012-05-17': {marked: true},
-    '2012-05-18': {marked: true, dotColor: 'red', activeOpacity: 0},
-    '2012-05-19': {disabled: true, disableTouchEvent: true}
-  }}
-/>
-```
+| Prop              | Default |        Type        | Description                                                                                                                               |
+| :---------------- | :-----: | :----------------: | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| children          |    -    | `React.ReactNode`  | Children. Should be of type `Section`                                                                                                     |
+| appearance        | `auto`  |      `string`      | `auto`: System Appearance; `light`: Light Appearance; `dark`: Dark Appearance; `[string]`: Appearance defined through `customAppearances` |
+| customAppearances |    -    | `THEME_APPEARANCE` |                                                                                                                                           |
+| style             |    -    |    `ViewStyle`     | Applied to the table wrapper                                                                                                              |
 
-You can customize a dot color for each day independently.
+### `Section`
 
-Multi-Dot marking
+The `Section` component is needed to render the `Cells` together with `Separators`.
+It's possible to use the `Flatlist` component instead ([Example](#render-with-flatlist)).
 
-<kbd>
- <img height=50 src="https://github.com/wix-private/wix-react-native-calendar/blob/master/demo/assets/marking4.png?raw=true">
-</kbd>
-<p></p>
+| Prop                      |            Default            |          Type          | Description                                                         |
+| :------------------------ | :---------------------------: | :--------------------: | ------------------------------------------------------------------- |
+| allowFontScaling          |            `true`             |         `bool`         | Respect Text Size accessibility setting on iOS                      |
+| footerComponent           |               -               |   `React.Component`    | Inject any component to replace original footer (optional)          |
+| headerComponent           |               -               |   `React.Component`    | Inject any component to replace original header (optional)          |
+| footer                    |               -               |        `string`        | Footer value                                                        |
+| footerTextColor           |           `#6d6d72`           |        `string`        | Text color of footer                                                |
+| footerTextStyle           |             `{}`              | `Text.propTypes.style` | These styles will be applied to the footer `Text`-Component.        |
+| header                    |               -               |        `string`        | Header value                                                        |
+| headerTextColor           |           `#6d6d72`           |        `string`        | Text color of header                                                |
+| headerTextStyle           |             `{}`              | `Text.propTypes.style` | These styles will be applied to the header `Text`-Component.        |
+| hideSeparator             |            `false`            |         `bool`         | Hide separators                                                     |
+| hideSurroundingSeparators |            `false`            |         `bool`         | Hide surrounding separators, best combined with roundedCorners      |
+| roundedCorners            |            `false`            |         `bool`         | Enable rounded corners, best combined with hideSurroundingSeparator |
+| sectionPaddingBottom      |             `15`              |        `number`        | Padding bottom of section                                           |
+| sectionPaddingTop         |             `15`              |        `number`        | Padding top of section                                              |
+| sectionTintColor          |           `#EFEFF4`           |        `string`        | Background color of section                                         |
+| separatorInsetLeft        |             `15`              |        `number`        | Left inset of separator                                             |
+| separatorInsetRight       |              `0`              |        `number`        | Right inset of separator                                            |
+| separatorTintColor        |           `#C8C7CC`           |        `string`        | Color of separator                                                  |
+| withSafeAreaView          | `true / false (on iOS <= 10)` |         `bool`         | Render section header and footer with SafeAreaView                  |
 
-Use `markingType={'multi-dot'}` if you want to display more than one dot. Both the `<Calendar/>` and `<CalendarList/>` support multiple dots by using `dots` array in `markedDates` prop.
-The property `color` is mandatory while `key` and `selectedColor` are optional. If key is omitted then the array index is used as key. If `selectedColor` is omitted then `color` will be used for selected dates.
+### `Cell`
 
-```javascript
-const vacation = {key: 'vacation', color: 'red', selectedDotColor: 'blue'};
-const massage = {key: 'massage', color: 'blue', selectedDotColor: 'blue'};
-const workout = {key: 'workout', color: 'green'};
+The style of the `Cell` component is inspired by the native `UITableView`.
+Because the `Cell` component is created with CSS only, its highly flexible.
+The content of the cell is separated in three views, which can all be modified via `props`: `cellImageView` | `cellContentView` | `cellAccessoryView`.
 
-<Calendar
-  markingType={'multi-dot'}
-  markedDates={{
-    '2017-10-25': {dots: [vacation, massage, workout], selected: true, selectedColor: 'red'},
-    '2017-10-26': {dots: [massage, workout], disabled: true}
-  }}
-/>;
-```
+To get an idea what you can modify via `props`, have a look at the [examples below](https://github.com/Purii/react-native-table-optimize#examples).
 
-Period marking
+| Prop                              |            Default            |                   Type                    | Description                                                                                                                                                                         |
+| :-------------------------------- | :---------------------------: | :---------------------------------------: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| accessory                         |               -               |                 `string`                  | Predefined accessory: `DisclosureIndicator`, `Detail`, `DetailDisclosure`, `Checkmark`                                                                                              |
+| accessoryColor                    |           `#007AFF`           |                 `string`                  | Color of accessory                                                                                                                                                                  |
+| accessoryColorDisclosureIndicator |           `#C7C7CC`           |                 `string`                  | Color of accessory `DisclosureIndicator`                                                                                                                                            |
+| allowFontScaling                  |            `true`             |                  `bool`                   | Respect Text Size accessibility setting on iOS                                                                                                                                      |
+| backgroundColor                   |            `#FFF`             |                 `string`                  | Background color of cell                                                                                                                                                            |
+| cellStyle                         |            `Basic`            |                 `string`                  | Predefined styles: `Basic`, `RightDetail`, `LeftDetail`, `Subtitle`                                                                                                                 |
+| cellAccessoryView                 |               -               |             `React.Component`             | Replace accessory view component (_e.g.: add Switch or ActivityIndicator_)                                                                                                          |
+| cellContentView                   |               -               |             `React.Component`             | Replace content view component                                                                                                                                                      |
+| cellImageView                     |               -               |             `React.Component`             | Replace image view component                                                                                                                                                        |
+children                            |               -               |             `React.Component`             | Additional content to be displayed below the cell. (_e.g: Add Picker or DateTimePicker_)
+| contentContainerStyle             |             `{}`              |          `View.propTypes.style`           | These styles will be applied to the content container which wraps all of the child views. Overrides `cellStyle` (_e.g.: Override paddingLeft and paddingRight or set fixed height_) |
+| detail                            |               -               |           `string` or `number`            | Detail value                                                                                                                                                                        |
+| detailTextProps                   |             `{}`              |             `Text.propTypes`              | These props will be applied to the (left- / right-) detail `Text`-Component.                                                                                                        |
+| detailTextStyle                   |             `{}`              |          `Text.propTypes.style`           | These styles will be applied to the (left- / right-) detail `Text`-Component.                                                                                                       |
+| disableImageResize                |            `false`            |                  `bool`                   | Disable resizing of image                                                                                                                                                           |
+| hideSeparator                     |            `false`            |                  `bool`                   | Hide the following `Separator`-Component                                                                                                                                            |
+| highlightActiveOpacity            |             `0.8`             |                 `number`                  | Opacity of cell when touch is active                                                                                                                                                |
+| highlightUnderlayColor            |            `black`            |                 `string`                  | Color of underlay that will show through when touch is active                                                                                                                       |
+| isDisabled                        |            `false`            |                  `bool`                   | Cell is disabled. `onPress` will not get triggered                                                                                                                                  |
+| image                             |               -               |         `React.Component (Image)`         | Image component displayed on the left. Will resized automatically                                                                                                                   |
+| leftDetailColor                   |           `#007AFF`           |                 `string`                  | Text color of left detail                                                                                                                                                           |
+| rightDetailColor                  |           `#8E8E93`           |                 `string`                  | Text color of right detail                                                                                                                                                          |
+| subtitleColor                     |            `#000`             |                 `string`                  | Text color of subtitle                                                                                                                                                              |
+| subtitleTextStyle                 |             `{}`              |          `Text.propTypes.style`           | These styles will be applied to the subtitle `Text`-Component.                                                                                                                      |
+| testID                            |          `undefined`          |                 `string`                  | Add testID to root component                                                                                                                                                        |
+| title                             |               -               | `string` or `number` or `React.Component` | Title value                                                                                                                                                                         |
+| titleTextColor                    |            `#000`             |                 `string`                  | Text color of title                                                                                                                                                                 |
+| titleTextProps                    |             `{}`              |             `Text.propTypes`              | These props will be applied to the title `Text`-Component.                                                                                                                          |
+| titleTextStyle                    |             `{}`              |          `Text.propTypes.style`           | These styles will be applied to the title `Text`-Component (_e.g.: update `fontSize` or `fontFamily`_)                                                                              |
+| titleTextStyleDisabled            |             `{}`              |          `Text.propTypes.style`           | These styles will be applied to the title `Text`-Component, when the cell is disabled                                                                                               |
+| onPress                           |               -               |             `func` or `false`             | If set, cell will be automaticaly initialized with TouchableHighlight                                                                                                               |
+| onPressDetailAccessory            |               -               |             `func` or `false`             | Listen to onPress event of detail accessory                                                                                                                                         |
+| withSafeAreaView                  | `true / false (on iOS <= 10)` |                  `bool`                   | Render cell with SafeAreaView                                                                                                                                                       |
 
-<kbd>
-  <img height=50 src="https://github.com/wix-private/wix-react-native-calendar/blob/master/demo/assets/marking2.png?raw=true">
-</kbd>
+#### Wrap `Cell`
 
-<kbd>
-  <img height=50 src="https://github.com/wix-private/wix-react-native-calendar/blob/master/demo/assets/marking3.png?raw=true">
-</kbd>
-<p></p>
+Sometimes custom `Cell` components are needed.
+By creating new component, which is based on `Cell`, its only necessary to set the props once.
 
 ```javascript
-<Calendar
-  markingType={'period'}
-  markedDates={{
-    '2012-05-20': {textColor: 'green'},
-    '2012-05-22': {startingDay: true, color: 'green'},
-    '2012-05-23': {selected: true, endingDay: true, color: 'green', textColor: 'gray'},
-    '2012-05-04': {disabled: true, startingDay: true, color: 'green', endingDay: true}
-  }}
-/>
-```
-
-Multi-period marking
-
-<kbd>
-  <img height=50 src="https://github.com/wix-private/wix-react-native-calendar/blob/master/demo/assets/marking6.png?raw=true">
-</kbd>
-<p></p>
-
-**CAUTION**: This marking is only fully supported by the `<Calendar/>` component because it expands its height. Usage with `<CalendarList/>` might lead to overflow issues.
-
-```javascript
-<Calendar
-  markingType="multi-period"
-  markedDates={{
-    '2017-12-14': {
-      periods: [
-        {startingDay: false, endingDay: true, color: '#5f9ea0'},
-        {startingDay: false, endingDay: true, color: '#ffa500'},
-        {startingDay: true, endingDay: false, color: '#f0e68c'}
-      ]
-    },
-    '2017-12-15': {
-      periods: [
-        {startingDay: true, endingDay: false, color: '#ffa500'},
-        {color: 'transparent'},
-        {startingDay: false, endingDay: false, color: '#f0e68c'}
-      ]
-    }
-  }}
-/>
-```
-
-Custom marking allows you to customize each marker with custom styles.
-
-<kbd>
-  <img height=50 src="https://github.com/wix-private/wix-react-native-calendar/blob/master/demo/assets/marking5.png?raw=true">
-</kbd>
-<p></p>
-
-```javascript
-<Calendar
-  markingType={'custom'}
-  markedDates={{
-    '2018-03-28': {
-      customStyles: {
-        container: {
-          backgroundColor: 'green'
-        },
-        text: {
-          color: 'black',
-          fontWeight: 'bold'
-        }
-      }
-    },
-    '2018-03-29': {
-      customStyles: {
-        container: {
-          backgroundColor: 'white',
-          elevation: 2
-        },
-        text: {
-          color: 'blue'
-        }
-      }
-    }
-  }}
-/>
-```
-
-**NEW!** While we still don't support multi marking type, we add the possibility to combine between `period` and `simple`.
-
-```javascript
-<Calendar
-  markingType={'period'}
-  markedDates={{
-    '2012-05-15': {marked: true, dotColor: '#50cebb'},
-    '2012-05-16': {marked: true, dotColor: '#50cebb'},
-    '2012-05-21': {startingDay: true, color: '#50cebb', textColor: 'white'},
-    '2012-05-22': {color: '#70d7c7', textColor: 'white'},
-    '2012-05-23': {color: '#70d7c7', textColor: 'white', marked: true, dotColor: 'white'},
-    '2012-05-24': {color: '#70d7c7', textColor: 'white'},
-    '2012-05-25': {endingDay: true, color: '#50cebb', textColor: 'white'}
-  }}
-/>
-```
-
-<kbd>
-  <img height=350 src="https://github.com/wix-private/wix-react-native-calendar/blob/master/demo/assets/multi-marking.png?raw=true">
-</kbd>
-<p></p>
-
-Keep in mind that different marking types are not compatible. You can use just one marking style for a calendar.
-
-#### Displaying data loading indicator
-
-<kbd>
-  <img height=50 src="https://github.com/wix-private/wix-react-native-calendar/blob/master/demo/assets/loader.png?raw=true">
-</kbd>
-<p></p>
-
-The loading indicator next to the month name will be displayed if `<Calendar/>` has `displayLoadingIndicator` prop and the `markedDates` collection does not have a value for every day of the month in question. When you load data for days, just set `[]` or special marking value to all days in `markedDates` collection.
-
-#### Customizing look & feel
-
-```javascript
-<Calendar
-  // Specify style for calendar container element. Default = {}
-  style={{
-    borderWidth: 1,
-    borderColor: 'gray',
-    height: 350
-  }}
-  // Specify theme properties to override specific styles for calendar parts. Default = {}
-  theme={{
-    backgroundColor: '#ffffff',
-    calendarBackground: '#ffffff',
-    textSectionTitleColor: '#b6c1cd',
-    textSectionTitleDisabledColor: '#d9e1e8',
-    selectedDayBackgroundColor: '#00adf5',
-    selectedDayTextColor: '#ffffff',
-    todayTextColor: '#00adf5',
-    dayTextColor: '#2d4150',
-    textDisabledColor: '#d9e1e8',
-    dotColor: '#00adf5',
-    selectedDotColor: '#ffffff',
-    arrowColor: 'orange',
-    disabledArrowColor: '#d9e1e8',
-    monthTextColor: 'blue',
-    indicatorColor: 'blue',
-    textDayFontFamily: 'monospace',
-    textMonthFontFamily: 'monospace',
-    textDayHeaderFontFamily: 'monospace',
-    textDayFontWeight: '300',
-    textMonthFontWeight: 'bold',
-    textDayHeaderFontWeight: '300',
-    textDayFontSize: 16,
-    textMonthFontSize: 16,
-    textDayHeaderFontSize: 16
-  }}
-/>
-```
-
-#### Customize days titles with disabled styling
-
-```javascript
-<Calendar
-  theme={{
-    textSectionTitleDisabledColor: '#d9e1e8'
-  }}
-  markedDates={{
-    ...this.getDisabledDates('2012-05-01', '2012-05-30', [0, 6])
-  }}
-  disabledDaysIndexes={[0, 6]}
-/>
-```
-
-#### Advanced styling
-
-If you want to have complete control over the calendar styles you can do it by overriding default `style.ts` files. For example, if you want to override `<CalendarHeader/>` style first you have to find stylesheet id for this file:
-
-https://github.com/wix/react-native-calendars/blob/master/src/calendar/header/style.ts#L60
-
-In this case it is `stylesheet.calendar.header`. Next you can add overriding stylesheet to your theme with this id.
-
-https://github.com/wix/react-native-calendars/blob/master/example/src/screens/calendars.tsx#L142
-
-```javascript
-theme={{
-  arrowColor: 'white',
-  'stylesheet.calendar.header': {
-    week: {
-      marginTop: 5,
-      flexDirection: 'row',
-      justifyContent: 'space-between'
-    }
-  }
-}}
-```
-
-#### Individual day header styling
-
-Using the above advanced styling, it is possible to set styles independently for each day's header. If we wanted to make the header for Sunday red, and Saturday blue, we could write something like the following:
-
-```javascript
-theme={{
-  'stylesheet.calendar.header': {
-    dayTextAtIndex0: {
-      color: 'red'
-    },
-    dayTextAtIndex6: {
-      color: 'blue'
-    }
-  }
-}}
-```
-
-<kbd>
-  <img height=50 src="https://github.com/wix-private/wix-react-native-calendar/blob/master/demo/assets/day-header-style.png?raw=true">
-</kbd>
-<p></p>
-
-**Disclaimer**: Issues that arise because something breaks after using stylesheet override will not be supported. Use this option at your own risk.
-
-#### Overriding day component
-
-If you need custom functionality not supported by current day component implementations you can pass your own custom day component to the calendar.
-
-```javascript
-<Calendar
-  style={[styles.calendar, {height: 300}]}
-  dayComponent={({date, state}) => {
-    return (
-      <View>
-        <Text style={{textAlign: 'center', color: state === 'disabled' ? 'gray' : 'black'}}>{date.day}</Text>
+...
+import {
+  Cell,
+  Section,
+  TableView,
+} from 'react-native-table-optimize';
+const CellVariant = (props) => (
+  <Cell
+    {...props}
+    cellContentView={
+      <View
+        style={{ alignItems: 'center', flexDirection: 'row', flex: 1, paddingVertical: 10 }}
+      >
+        <Text
+          allowFontScaling
+          numberOfLines={1}
+          style={{ flex: 1, fontSize: 20 }}
+        >
+          {props.title}
+        </Text>
       </View>
+    }
+  />
+);
+...
+<TableView>
+  <Section>
+    <CellVariant title="Element 1" />
+    <CellVariant title="Element 2" />
+    <CellVariant title="Element 3" />
+    <CellVariant title="Element 4" />
+  </Section>
+</TableView>
+...
+```
+
+### `Separator`
+
+In general the `Separator` component is used internally by the `Section` component.
+But additionally this component can be used together with `FlatList`.
+See the [example below](#render-with-flatlist).
+
+| Prop             |            Default            |   Type   | Description                           |
+| :--------------- | :---------------------------: | :------: | ------------------------------------- |
+| backgroundColor  |           `#EFEFF4`           | `string` | Background color                      |
+| insetLeft        |             `15`              | `number` | Left inset of separator               |
+| insetRight       |              `0`              | `number` | Right inset of separator              |
+| isHidden         |            `false`            |  `bool`  | Hide separator but keeping its height |
+| tintColor        |           `#C8C7CC`           | `string` | Color of separator                    |
+| withSafeAreaView | `true / false (on iOS <= 10)` |  `bool`  | Render separator with SafeAreaView    |
+
+## Examples
+
+The following examples can be found in the folder `example`.
+To run the example project, follow these steps:
+
+1.  `git clone https://github.com/Purii/react-native-table-optimize`
+1.  `cd example`
+1.  `yarn` or `npm i`
+1.  run `/example/ios/example.xcodeproj` via Xcode
+
+- [Quick look](#quick-look)
+- [Use case: About-screen](#use-case-about-screen)
+- [Complete example / vs. native iOS](#react-native-table-optimize-vs-native-ios)
+- [Render with `FlatList`](#render-with-flatlist)
+
+### Quick look
+
+```javascript
+// ActivityIndicator as accessory
+  <Cell
+    title="Switch"
+    cellAccessoryView={<Switch />}
+    contentContainerStyle={{ paddingVertical: 4 }} // Adjust height
+  />
+// Switch as accessory
+  <Cell
+    title="ActivityIndicator"
+    cellAccessoryView={<ActivityIndicator />}
+  />
+// TextInput
+  <Cell
+    cellContentView={<TextInput style={{fontSize: 16, flex: 1}} placeholder="TextInput"/>}
+  />
+// Image
+  <Cell
+    title="Image"
+    image={
+      <Image
+        style={{ borderRadius: 5 }}
+        source={{
+          uri: 'https://facebook.github.io/react/img/logo_og.png',
+        }}
+      />
+    }
+  />
+```
+
+### Use case: About-screen
+
+![](https://raw.github.com/Purii/react-native-table-optimize/master/screenshotAboutScreen.png)
+
+```javascript
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ * @flow
+ */
+import React, { Component } from 'react';
+import { AppRegistry, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Cell, Section, TableView } from 'react-native-table-optimize';
+export default class App extends Component<{}> {
+  render() {
+    return (
+      <ScrollView contentContainerStyle={styles.stage}>
+        <View
+          style={{
+            backgroundColor: '#37474F',
+            height: 500,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <View
+            style={{
+              backgroundColor: '#ffc107',
+              width: 80,
+              height: 80,
+              borderRadius: 10,
+            }}
+          />
+        </View>
+        <TableView>
+          <Section footer="All rights reserved.">
+            <Cell
+              title="Help / FAQ"
+              titleTextColor="#007AFF"
+              onPress={() => console.log('open Help/FAQ')}
+            />
+            <Cell
+              title="Contact Us"
+              titleTextColor="#007AFF"
+              onPress={() => console.log('open Contact Us')}
+            />
+          </Section>
+        </TableView>
+      </ScrollView>
     );
-  }}
-/>
+  }
+}
+const styles = StyleSheet.create({
+  stage: {
+    backgroundColor: '#EFEFF4',
+    paddingBottom: 20,
+    flex: 1,
+  },
+});
 ```
 
-The `dayComponent` prop has to receive a RN component or a function that receive props. The `dayComponent` will receive such props:
+### `react-native-table-optimize` vs. Native iOS
 
-- state - disabled if the day should be disabled (this is decided by base calendar component).
-- marking - `markedDates` value for this day.
-- date - the date object representing this day.
+The left and middle screens are build using `react-native-table-optimize`. The right one is native.
 
-**Tip**: Don't forget to implement `shouldComponentUpdate()` for your custom day component to make the calendar perform better
-
-If you implement an awesome day component please make a PR so that other people could use it :)
-
-### CalendarList
-
-<kbd>
-  <img src="https://github.com/wix-private/wix-react-native-calendar/blob/master/demo/assets/calendar-list.gif?raw=true">
-</kbd>
-<p></p>
-
-`<CalendarList/>` is scrollable semi-infinite calendar composed of `<Calendar/>` components. Currently it is possible to scroll 4 years back and 4 years to the future. All parameters that are available for `<Calendar/>` are also available for this component. There are also some additional params that can be used:
+|                     `react-native-table-optimize` (Dark Appearance)                     |                            `react-native-table-optimize`                            | Native iOS                                                                                  |
+| :---------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------: | ------------------------------------------------------------------------------------------- |
+| ![](https://raw.github.com/Purii/react-native-table-optimize/master/screenshotDark.png) | ![](https://raw.github.com/Purii/react-native-table-optimize/master/screenshot.png) | ![](https://raw.github.com/Purii/react-native-table-optimize/master/screenshotNative.png) |
 
 ```javascript
-<CalendarList
-  // Callback which gets executed when visible months change in scroll view. Default = undefined
-  onVisibleMonthsChange={(months) => {console.log('now these months are visible', months);}}
-  // Max amount of months allowed to scroll to the past. Default = 50
-  pastScrollRange={50}
-  // Max amount of months allowed to scroll to the future. Default = 50
-  futureScrollRange={50}
-  // Enable or disable scrolling of calendar list
-  scrollEnabled={true}
-  // Enable or disable vertical scroll indicator. Default = false
-  showScrollIndicator={true}
-  ...calendarParams
-/>
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ * @flow
+ */
+import React, { Component } from 'react';
+import {
+  ActivityIndicator,
+  AppRegistry,
+  Dimensions,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import { Cell, Section, TableView } from 'react-native-table-optimize';
+export default class App extends Component<{}> {
+  render() {
+    return (
+      <ScrollView contentContainerStyle={styles.stage}>
+        <TableView>
+          <Section header="STANDARD" footer="A Footer">
+            <Cell cellStyle="Basic" title="Basic" />
+            <Cell cellStyle="RightDetail" title="RightDetail" detail="Detail" />
+            <Cell cellStyle="LeftDetail" title="LeftDetail" detail="Detail" />
+            <Cell
+              cellStyle="Subtitle"
+              title="Subtitle"
+              detail="No linebreakkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"
+            />
+            <Cell
+              cellStyle="Basic"
+              title="Pressable w/ accessory"
+              accessory="DisclosureIndicator"
+              onPress={() => console.log('Heyho!')}
+            />
+          </Section>
+          <Section header="DISABLED">
+            <Cell cellStyle="Basic" isDisabled title="Basic" />
+            <Cell
+              cellStyle="RightDetail"
+              isDisabled
+              title="RightDetail"
+              detail="Detail"
+            />
+            <Cell
+              cellStyle="LeftDetail"
+              isDisabled
+              title="LeftDetail"
+              detail="Detail"
+            />
+            <Cell
+              cellStyle="Subtitle"
+              isDisabled
+              title="Subtitle"
+              detail="No linebreakkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"
+            />
+            <Cell
+              cellStyle="Basic"
+              isDisabled
+              title="Pressable w/ accessory"
+              accessory="DisclosureIndicator"
+              onPress={() => console.log('Heyho!')}
+            />
+          </Section>
+          <Section header="ACCESSORY">
+            <Cell
+              cellStyle="Basic"
+              accessory="DisclosureIndicator"
+              title="Basic"
+            />
+            <Cell
+              cellStyle="RightDetail"
+              accessory="DetailDisclosure"
+              title="RightDetail"
+              detail="Detail"
+            />
+            <Cell
+              cellStyle="LeftDetail"
+              accessory="Detail"
+              title="LeftDetail"
+              detail="Detail"
+            />
+            <Cell
+              cellStyle="Subtitle"
+              accessory="Checkmark"
+              title="Subtitle"
+              detail="No linebreakkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"
+            />
+            <Cell
+              cellStyle="Basic"
+              accessory="Detail"
+              title="Pressable w/ accessory"
+              onPress={() => console.log('Heyho!')}
+            />
+          </Section>
+          <Section header="Image" footer="A Footer">
+            <Cell
+              cellStyle="Basic"
+              title="Basic"
+              image={
+                <Image
+                  style={{ borderRadius: 5 }}
+                  source={{
+                    uri: 'https://facebook.github.io/react/img/logo_og.png',
+                  }}
+                />
+              }
+            />
+            <Cell
+              cellStyle="RightDetail"
+              title="RightDetail"
+              detail="Detail"
+              image={
+                <Image
+                  style={{ borderRadius: 5 }}
+                  source={{
+                    uri: 'https://facebook.github.io/react/img/logo_og.png',
+                  }}
+                />
+              }
+            />
+            <Cell
+              cellStyle="LeftDetail"
+              title="LeftDetail"
+              detail="Detail"
+              image={
+                <Image
+                  style={{ borderRadius: 5 }}
+                  source={{
+                    uri: 'https://facebook.github.io/react/img/logo_og.png',
+                  }}
+                />
+              }
+            />
+            <Cell
+              cellStyle="Subtitle"
+              title="Subtitle"
+              detail="No linebreakkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"
+              image={
+                <Image
+                  style={{ borderRadius: 5 }}
+                  source={{
+                    uri: 'https://facebook.github.io/react/img/logo_og.png',
+                  }}
+                />
+              }
+            />
+            <Cell
+              cellStyle="Basic"
+              title="Pressable w/ accessory"
+              accessory="DisclosureIndicator"
+              onPress={() => console.log('Heyho!')}
+              image={
+                <Image
+                  style={{ borderRadius: 5 }}
+                  source={{
+                    uri: 'https://facebook.github.io/react/img/logo_og.png',
+                  }}
+                />
+              }
+            />
+            <Cell
+              cellStyle="Basic"
+              title="Disable image resize"
+              disableImageResize
+              image={
+                <Image
+                  style={{ height: 50, width: 50, borderRadius: 5 }}
+                  source={{
+                    uri: 'https://facebook.github.io/react/img/logo_og.png',
+                  }}
+                />
+              }
+            />
+          </Section>
+          <Section header="MISC">
+            <Cell
+              cellStyle="RightDetail"
+              title="RightDetail"
+              detail="Detail"
+              rightDetailColor="#6cc644"
+            />
+            <Cell
+              cellStyle="LeftDetail"
+              title="LeftDetail"
+              detail="Detail"
+              leftDetailColor="#6cc644"
+            />
+            <Cell
+              cellStyle="Basic"
+              title="Switch"
+              cellAccessoryView={<Switch />}
+              contentContainerStyle={{ paddingVertical: 4 }}
+            />
+            <Cell
+              cellStyle="Basic"
+              title="ActivityIndicator"
+              cellAccessoryView={<ActivityIndicator />}
+            />
+            <Cell
+              cellContentView={
+                <TextInput
+                  style={{ fontSize: 16, flex: 1 }}
+                  placeholder="TextInput"
+                />
+              }
+            />
+          </Section>
+          <Section header="CUSTOMCELLS">
+            <Cell
+              onPress={() => console.log('Heyho!')}
+              contentContainerStyle={{ alignItems: 'flex-start', height: 60 }}
+              cellContentView={
+                <Text style={{ flex: 1, fontSize: 16 }}>
+                  Custom height with Cell-Component
+                </Text>
+              }
+            />
+          </Section>
+          <Section headerComponent={<CustomSectionHeader />}>
+            <Cell cellStyle="Basic" title="Section uses prop headerComponent" />
+          </Section>
+        </TableView>
+        <View
+          style={{
+            minHeight: Dimensions.get('window').height,
+          }}>
+          <View
+            style={{
+              backgroundColor: '#37474F',
+              height: 500,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <View
+              style={{
+                backgroundColor: '#ffc107',
+                width: 80,
+                height: 80,
+                borderRadius: 10,
+              }}
+            />
+          </View>
+          <TableView>
+            <Section footer="All rights reserved.">
+              <Cell
+                title="Help / FAQ"
+                titleTextColor="#007AFF"
+                onPress={() => console.log('open Help/FAQ')}
+              />
+              <Cell
+                title="Contact Us"
+                titleTextColor="#007AFF"
+                onPress={() => console.log('open Contact Us')}
+              />
+            </Section>
+          </TableView>
+        </View>
+      </ScrollView>
+    );
+  }
+}
+const styles = StyleSheet.create({
+  stage: {
+    backgroundColor: '#EFEFF4',
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
+});
 ```
 
-#### Horizontal CalendarList
+### Render with `FlatList`
 
-<kbd>
-  <img src="https://github.com/wix-private/wix-react-native-calendar/blob/master/demo/assets/horizontal-calendar-list.gif?raw=true">
-</kbd>
-<p></p>
-
-You can also make the `CalendarList` scroll horizontally. To do that you need to pass specific props to the `CalendarList`:
+Be aware of the prop [`keyboardShouldPersistTaps`](https://facebook.github.io/react-native/docs/scrollview#keyboardshouldpersisttaps) if using `ScrollView` or similar components. (See #85)
 
 ```javascript
-<CalendarList
-  // Enable horizontal scrolling, default = false
-  horizontal={true}
-  // Enable paging on horizontal, default = false
-  pagingEnabled={true}
-  // Set custom calendarWidth.
-  calendarWidth={320}
-  ...calendarListParams
-  ...calendarParams
-/>
+import React from 'react';
+import { FlatList } from 'react-native';
+import { Cell, Separator, TableView } from 'react-native-table-optimize';
+const data = [
+  { id: 1, title: '1' },
+  { id: 2, title: '2' },
+  { id: 3, title: '3' },
+  { id: 4, title: '4' },
+];
+export default ExampleWithFlatList = () => (
+  <TableView style={{ flex: 1 }}>
+    <FlatList
+      data={data}
+      keyExtractor={(item, index) => item.id}
+      renderItem={({ item, separators }) => (
+        <Cell
+          title={item.title}
+          onPress={console.log}
+          onHighlightRow={separators.highlight}
+          onUnHighlightRow={separators.unhighlight}
+        />
+      )}
+      ItemSeparatorComponent={({ highlighted }) => (
+        <Separator isHidden={highlighted} />
+      )}
+    />
+  </TableView>
+);
 ```
 
-### Agenda
+# Try it out
 
-<kbd>
-  <img src="https://github.com/wix-private/wix-react-native-calendar/blob/master/demo/assets/agenda.gif?raw=true">
-</kbd>
-<p></p>
-
-An advanced `Agenda` component that can display interactive listings for calendar day items.
-
-```javascript
-<Agenda
-  // The list of items that have to be displayed in agenda. If you want to render item as empty date
-  // the value of date key has to be an empty array []. If there exists no value for date key it is
-  // considered that the date in question is not yet loaded
-  items={{
-    '2012-05-22': [{name: 'item 1 - any js object'}],
-    '2012-05-23': [{name: 'item 2 - any js object', height: 80}],
-    '2012-05-24': [],
-    '2012-05-25': [{name: 'item 3 - any js object'}, {name: 'any js object'}]
-  }}
-  // Callback that gets called when items for a certain month should be loaded (month became visible)
-  loadItemsForMonth={month => {
-    console.log('trigger items loading');
-  }}
-  // Callback that fires when the calendar is opened or closed
-  onCalendarToggled={calendarOpened => {
-    console.log(calendarOpened);
-  }}
-  // Callback that gets called on day press
-  onDayPress={day => {
-    console.log('day pressed');
-  }}
-  // Callback that gets called when day changes while scrolling agenda list
-  onDayChange={day => {
-    console.log('day changed');
-  }}
-  // Initially selected day
-  selected={'2012-05-16'}
-  // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-  minDate={'2012-05-10'}
-  // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-  maxDate={'2012-05-30'}
-  // Max amount of months allowed to scroll to the past. Default = 50
-  pastScrollRange={50}
-  // Max amount of months allowed to scroll to the future. Default = 50
-  futureScrollRange={50}
-  // Specify how each item should be rendered in agenda
-  renderItem={(item, firstItemInDay) => {
-    return <View />;
-  }}
-  // Specify how each date should be rendered. day can be undefined if the item is not first in that day
-  renderDay={(day, item) => {
-    return <View />;
-  }}
-  // Specify how empty date content with no items should be rendered
-  renderEmptyDate={() => {
-    return <View />;
-  }}
-  // Specify how agenda knob should look like
-  renderKnob={() => {
-    return <View />;
-  }}
-  // Specify what should be rendered instead of ActivityIndicator
-  renderEmptyData={() => {
-    return <View />;
-  }}
-  // Specify your item comparison function for increased performance
-  rowHasChanged={(r1, r2) => {
-    return r1.text !== r2.text;
-  }}
-  // Hide knob button. Default = false
-  hideKnob={true}
-  // When `true` and `hideKnob` prop is `false`, the knob will always be visible and the user will be able to drag the knob up and close the calendar. Default = false
-  showClosingKnob={false}
-  // By default, agenda dates are marked if they have at least one item, but you can override this if needed
-  markedDates={{
-    '2012-05-16': {selected: true, marked: true},
-    '2012-05-17': {marked: true},
-    '2012-05-18': {disabled: true}
-  }}
-  // If disabledByDefault={true} dates flagged as not disabled will be enabled. Default = false
-  disabledByDefault={true}
-  // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly
-  onRefresh={() => console.log('refreshing...')}
-  // Set this true while waiting for new data from a refresh
-  refreshing={false}
-  // Add a custom RefreshControl component, used to provide pull-to-refresh functionality for the ScrollView
-  refreshControl={null}
-  // Agenda theme
-  theme={{
-    ...calendarTheme,
-    agendaDayTextColor: 'yellow',
-    agendaDayNumColor: 'green',
-    agendaTodayColor: 'red',
-    agendaKnobColor: 'blue'
-  }}
-  // Agenda container style
-  style={{}}
-/>
-```
-
-## Authors
-
-- [Tautvilas Mecinskas](https://github.com/tautvilas/) - Initial code - [@tautvilas](https://twitter.com/Tautvilas)
-- Katrin Zotchev - Initial design - [@katrin_zot](https://twitter.com/katrin_zot)
-
-See also the list of [contributors](https://github.com/wix/react-native-calendar-components/contributors) who participated in this project.
-
-## Contributing
-
-Pull requests are most welcome!
-Please `npm run test` and `npm run lint` before push.
-Don't forget to add a **title** and a **description** that explain the issue you're trying to solve and your suggested solution.
-Screenshots and gifs are VERY helpful.
-Please do NOT format the files as we are trying to keep a unified syntax and the reviewing process fast and simple.
+Try it in Expo: [https://snack.expo.io/@purii/react-native-table-optimize](https://snack.expo.io/@purii/react-native-table-optimize)

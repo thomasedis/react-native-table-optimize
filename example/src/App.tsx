@@ -18,13 +18,14 @@ export default function App() {
         "Column 2",
         "Column 3",
         "Column 4",
+        "Column 5",
     ]
 
     let dataRow: Array<any> = [
         {
             id: 1,
-            content1: 'Row-1 Column-1',
-            content2: 'Row-1 Column-2',
+            content1: 'Row-1  Column-1',
+            content2: 'Row-1  Column-2',
             content3: 'Row-1 Column-3',
             content4: 'Row-1 Column-4',
             content5: 'Row-1 Column-5',
@@ -105,8 +106,8 @@ export default function App() {
 
     return (
         <ScrollView>
-            <Text style={{textAlign: 'center', paddingVertical: 20}}>Table - Optimize</Text>
-            <TableWrap>
+            <Text style={{textAlign: 'center', paddingVertical: 30, marginTop: 30, fontWeight: '700', fontSize: 20}}>Table Native Table Optimize</Text>
+            <TableWrap width='125%' scrollHorizontal={true}> 
                 <TableHead
                     dataSpacing={dataSpacing}
                     dataTitleHead={dataTitleTHead}
@@ -124,7 +125,7 @@ export default function App() {
                 />
                 <TableBody
                     isScroll={true}
-                    bodyHeight={350}
+                    bodyHeight={465}
                     onRefreshTable={() => {
                         Alert.alert('On RefreshDataTable')
                     }}
@@ -161,7 +162,6 @@ export default function App() {
                     }
                 </TableBody>
             </TableWrap>
-            <Text style={{textAlign: 'center', paddingVertical: 20}}>Table - Optimize</Text>
         </ScrollView>
     );
 }

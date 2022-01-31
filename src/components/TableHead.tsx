@@ -10,7 +10,6 @@ import {
 import * as THEME from './Theme';
 
 export interface TableHeadInterface {
-  width?: string;
   titleTextStyle?: StyleProp<TextStyle>;
   itemStyle?: StyleProp<ViewStyle>;
   dataTitleHead?: Array<string>;
@@ -18,7 +17,6 @@ export interface TableHeadInterface {
 }
 
 const TableHead: React.FC<TableHeadInterface> = ({
-  width = '100%',
   titleTextStyle = {},
   itemStyle = {},
   dataTitleHead = [],
@@ -27,7 +25,7 @@ const TableHead: React.FC<TableHeadInterface> = ({
 }: TableHeadInterface) => {
 
   return (
-    <View style={{...styles.container, width: width,}}>
+    <View style={{...styles.container}}>
       {
         dataSpacing?.length != 0 && dataSpacing.map((itemWidth, idx) => {
           return (
