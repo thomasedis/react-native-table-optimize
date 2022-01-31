@@ -4,7 +4,6 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import * as THEME from './Theme';
 
 export interface TableWrapInterface {
   children: JSX.Element[] | JSX.Element;

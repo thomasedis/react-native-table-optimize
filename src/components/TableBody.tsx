@@ -24,7 +24,7 @@ const TableBody: React.FC<TableBodyInterface> = ({
   
 }: TableBodyInterface) => {
 
-  const [refreshing, setRefreshing] = useState(false)
+  const [refreshing] = useState(false)
   if (isScroll) {
     return (
       <View style={{height: bodyHeight,}}>
@@ -43,7 +43,7 @@ const TableBody: React.FC<TableBodyInterface> = ({
     );
   }
   return (
-    <View style={bodyStyle}>
+    <View style={{height: bodyHeight, ...(bodyStyle as object), overflow: 'hidden'}}>
       {children}
     </View>
   );
