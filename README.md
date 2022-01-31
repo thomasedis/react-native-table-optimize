@@ -20,11 +20,11 @@ The package is both **Android** and **iOS** compatible.
   <img height=600 src="https://github.com/thomasedis/react-native-table-optimize/blob/master/src/images/demo_ios.gif?raw=true">
 </kbd>
 
+<kbd />
 Have a look at the [examples below](https://github.com/thomasedis/react-native-table-optimize/tree/master/example)! :-)
 
 - [Installation](#installation)
-- [Extensible](#extensible)
-- [Props](#props): [`TableView`](#tableview) [`Cell`](#cell) [`Section`](#section) [`Separator`](#separator)
+- [Props](#props): [`TableWrap`](#tablewrap) [`TableHead`](#tablehead) [`TableBody`](#tablebody) [`TableRow`](#tablerow)
 - [Examples](#examples)
 - [Try it out](#try-it-out)
 
@@ -35,6 +35,7 @@ Have a look at the [examples below](https://github.com/thomasedis/react-native-t
 ```sh
 // yarn
 yarn add react-native-table-optimize
+
 // or npm
 npm i react-native-table-optimize
 ```
@@ -44,50 +45,16 @@ npm i react-native-table-optimize
 ```javascript
 import { TableWrap, TableHead, TableBody, TableRow } from 'react-native-table-optimize';
 ```
-
-## Extensible
-
-`react-native-table-optimize` provides you with some predefined CSS-styles, inspired by the native TableView.
-You can always mix the `Cell`-instances inside a `Section`, with other (React-Native)-Views.
-
-### Override defaults of `Cell`-Component
-
-Don't repeat yourself.
-If you override the default props over and over again, just pass them as an object.
-
-```jsx
-const cellPropsCustom = {
-  cellStyle: 'Basic',
-  title: 'Basic Custom',
-  backgroundColor: 'black',
-};
-<Cell onPress={console.log} {...cellPropsCustom} />
-<Cell onPress={console.log} {...cellPropsCustom} />
-```
-
-### Separator BackgroundColor is derived from Cell BackgroundColor
-
-The `Separator`-Component is a line from the left end to the right end.
-According to the original iOS TableView there should be an insent on the left end.
-This is done by separating the `Separator`-Component in two parts: `SeparatorContainer` (full width) and `SeparatorInner` (width - inset). (See: [`Separator.tsx`](/src/components/Separator.tsx))
-The `SeparatorContainer` has the same color that the `Cell`-Component above.
-The `SeparatorInner` has the default Separator Color.
-Pressing a Cell Component will change the color of `SeparatorInner` to `transparent`.
-
-#### Why is that so complicated?
-
-Because just hiding the separator would make the height of the component jump.
-
 ## Props
 
-- [`TableView`](#tableview)
-- [`Cell`](#cell)
-- [`Section`](#section)
-- [`Separator`](#separator)
+- [`TableWrap`](#tablewrap)
+- [`TableHead`](#tablehead)
+- [`TableBody`](#tablebody)
+- [`TableRow`](#tablerow)
 
-### `TableView`
+### `TableWrap`
 
-The `TableView` component controls the theme.
+The `TableWrap` component controls the theme.
 
 | Prop              | Default |        Type        | Description                                                                                                                               |
 | :---------------- | :-----: | :----------------: | ----------------------------------------------------------------------------------------------------------------------------------------- |
@@ -96,7 +63,7 @@ The `TableView` component controls the theme.
 | customAppearances |    -    | `THEME_APPEARANCE` |                                                                                                                                           |
 | style             |    -    |    `ViewStyle`     | Applied to the table wrapper                                                                                                              |
 
-### `Section`
+### `TableHead`
 
 The `Section` component is needed to render the `Cells` together with `Separators`.
 It's possible to use the `Flatlist` component instead ([Example](#render-with-flatlist)).
@@ -123,7 +90,7 @@ It's possible to use the `Flatlist` component instead ([Example](#render-with-fl
 | separatorTintColor        |           `#C8C7CC`           |        `string`        | Color of separator                                                  |
 | withSafeAreaView          | `true / false (on iOS <= 10)` |         `bool`         | Render section header and footer with SafeAreaView                  |
 
-### `Cell`
+### `TableBody`
 
 The style of the `Cell` component is inspired by the native `UITableView`.
 Because the `Cell` component is created with CSS only, its highly flexible.
@@ -209,7 +176,7 @@ const CellVariant = (props) => (
 ...
 ```
 
-### `Separator`
+### `TableRow`
 
 In general the `Separator` component is used internally by the `Section` component.
 But additionally this component can be used together with `FlatList`.
@@ -229,7 +196,7 @@ See the [example below](#render-with-flatlist).
 The following examples can be found in the folder `example`.
 To run the example project, follow these steps:
 
-1.  `git clone https://github.com/Purii/react-native-table-optimize`
+1.  `git clone https://github.com/thomasedis/react-native-table-optimize`
 1.  `cd example`
 1.  `yarn` or `npm i`
 1.  run `/example/ios/example.xcodeproj` via Xcode
@@ -649,7 +616,3 @@ export default ExampleWithFlatList = () => (
   </TableView>
 );
 ```
-
-# Try it out
-
-Try it in Expo: [https://snack.expo.io/@purii/react-native-table-optimize](https://snack.expo.io/@purii/react-native-table-optimize)
