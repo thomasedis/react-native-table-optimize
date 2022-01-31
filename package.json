@@ -35,10 +35,7 @@
     "react-native",
     "react-native-table-optimize",
     "react-native-table",
-    "react-table",
-    "table",
-    "ios",
-    "android"
+    "react-table"
   ],
   "repository": {
     "type": "git",

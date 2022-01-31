@@ -1,130 +1,132 @@
 import * as React from 'react';
 
-import { StyleSheet, Alert, Text, ScrollView } from 'react-native';
+import { Alert, Text, ScrollView } from 'react-native';
 import { TableWrap, TableHead, TableBody, TableRow } from 'react-native-table-optimize';
+import * as THEME from './constants/Theme'
 
 export default function App() {
 
     let dataSpacing: Array<string> = [
-        "20%",
-        "20%",
-        "20%",
-        "40%",
+        "25%",
+        "25%",
+        "25%",
+        "25%",
     ]
 
     let dataTitleTHead: Array<string> = [
-        "Cell 1",
-        "Cell 2",
-        "Cell 3",
-        "Cell 4",
-        "Cell 5",
+        "Column 1",
+        "Column 2",
+        "Column 3",
+        "Column 4",
     ]
 
     let dataRow: Array<any> = [
         {
             id: 1,
-            content1: 'Content Row-1 Cell-1',
-            content2: 'Content Row-1 Cell-2',
-            content3: 'Content Row-1 Cell-3',
-            content4: 'Content Row-1 Cell-4',
-            content5: 'Content Row-1 Cell-5',
+            content1: 'Row-1 Column-1',
+            content2: 'Row-1 Column-2',
+            content3: 'Row-1 Column-3',
+            content4: 'Row-1 Column-4',
+            content5: 'Row-1 Column-5',
         },
         {
             id: 2,
-            content1: 'Content Row-2 Cell-1',
-            content2: 'Content Row-2 Cell-2',
-            content3: 'Content Row-2 Cell-3',
-            content4: 'Content Row-2 Cell-4',
-            content5: 'Content Row-2 Cell-5',
+            content1: 'Row-2 Column-1',
+            content2: 'Row-2 Column-2',
+            content3: 'Row-2 Column-3',
+            content4: 'Row-2 Column-4',
+            content5: 'Row-2 Column-5',
         },
         {
             id: 3,
-            content1: 'Content Row-3 Cell-1',
-            content2: 'Content Row-3 Cell-2',
-            content3: 'Content Row-3 Cell-3',
-            content4: 'Content Row-3 Cell-4',
-            content5: 'Content Row-3 Cell-5',
+            content1: 'Row-3 Column-1',
+            content2: 'Row-3 Column-2',
+            content3: 'Row-3 Column-3',
+            content4: 'Row-3 Column-4',
+            content5: 'Row-3 Column-5',
         },
         {
             id: 4,
-            content1: 'Content Row-4 Cell-1',
-            content2: 'Content Row-4 Cell-2',
-            content3: 'Content Row-4 Cell-3',
-            content4: 'Content Row-4 Cell-4',
-            content5: 'Content Row-4 Cell-5',
+            content1: 'Row-4 Column-1',
+            content2: 'Row-4 Column-2',
+            content3: 'Row-4 Column-3',
+            content4: 'Row-4 Column-4',
+            content5: 'Row-4 Column-5',
         },
         {
             id: 5,
-            content1: 'Content Row-5 Cell-1',
-            content2: 'Content Row-5 Cell-2',
-            content3: 'Content Row-5 Cell-3',
-            content4: 'Content Row-5 Cell-4',
-            content5: 'Content Row-5 Cell-5',
+            content1: 'Row-5 Column-1',
+            content2: 'Row-5 Column-2',
+            content3: 'Row-5 Column-3',
+            content4: 'Row-5 Column-4',
+            content5: 'Row-5 Column-5',
         },
         {
             id: 6,
-            content1: 'Content Row-6 Cell-1',
-            content2: 'Content Row-6 Cell-2',
-            content3: 'Content Row-6 Cell-3',
-            content4: 'Content Row-6 Cell-4',
-            content5: 'Content Row-6 Cell-5',
+            content1: 'Row-6 Column-1',
+            content2: 'Row-6 Column-2',
+            content3: 'Row-6 Column-3',
+            content4: 'Row-6 Column-4',
+            content5: 'Row-6 Column-5',
         },
         {
             id: 7,
-            content1: 'Content Row-7 Cell-1',
-            content2: 'Content Row-7 Cell-2',
-            content3: 'Content Row-7 Cell-3',
-            content4: 'Content Row-7 Cell-4',
-            content5: 'Content Row-7 Cell-5',
+            content1: 'Row-7 Column-1',
+            content2: 'Row-7 Column-2',
+            content3: 'Row-7 Column-3',
+            content4: 'Row-7 Column-4',
+            content5: 'Row-7 Column-5',
         },
         {
             id: 8,
-            content1: 'Content Row-8 Cell-1',
-            content2: 'Content Row-8 Cell-2',
-            content3: 'Content Row-8 Cell-3',
-            content4: 'Content Row-8 Cell-4',
-            content5: 'Content Row-8 Cell-5',
+            content1: 'Row-8 Column-1',
+            content2: 'Row-8 Column-2',
+            content3: 'Row-8 Column-3',
+            content4: 'Row-8 Column-4',
+            content5: 'Row-8 Column-5',
         },
         {
             id: 9,
-            content1: 'Content Row-9 Cell-1',
-            content2: 'Content Row-9 Cell-2',
-            content3: 'Content Row-9 Cell-3',
-            content4: 'Content Row-9 Cell-4',
-            content5: 'Content Row-9 Cell-5',
+            content1: 'Row-9 Column-1',
+            content2: 'Row-9 Column-2',
+            content3: 'Row-9 Column-3',
+            content4: 'Row-9 Column-4',
+            content5: 'Row-9 Column-5',
         },
         {
             id: 10,
-            content1: 'Content Row-10 Cell-1',
-            content2: 'Content Row-10 Cell-2',
-            content3: 'Content Row-10 Cell-3',
-            content4: 'Content Row-10 Cell-4',
-            content5: 'Content Row-10 Cell-5',
+            content1: 'Row-10 Column-1',
+            content2: 'Row-10 Column-2',
+            content3: 'Row-10 Column-3',
+            content4: 'Row-10 Column-4',
+            content5: 'Row-10 Column-5',
         },
     ]
+
     return (
         <ScrollView>
             <Text style={{textAlign: 'center', paddingVertical: 20}}>Table - Optimize</Text>
-            <TableWrap scrollHorizontal={false}>
+            <TableWrap>
                 <TableHead
                     dataSpacing={dataSpacing}
                     dataTitleHead={dataTitleTHead}
                     itemStyle={{
-                        backgroundColor: 'red',
+                        backgroundColor: THEME.PRIMARY_COLOR_LIGHT,
                         padding: 10,
                         borderWidth: 1,
-                        borderColor: '#999'
+                        borderColor: THEME.PRIMARY_COLOR_DARK,
                     }}
                     titleTextStyle={{
                         textAlign: 'center',
+                        color: THEME.BLACK_COLOR,
+                        fontWeight: '700'
                     }}
                 />
                 <TableBody
                     isScroll={true}
-                    bodyHeight={250}
+                    bodyHeight={350}
                     onRefreshTable={() => {
-                        console.log('HELLOOO');
-                        
+                        Alert.alert('On RefreshDataTable')
                     }}
                 >
                     {
@@ -140,40 +142,26 @@ export default function App() {
                                 <TableRow 
                                     key={idx}
                                     width='100%' 
-                                    keyDataRow='content'
                                     dataSpacing={dataSpacing}      
                                     dataRow={itemRow}    
                                     textStyle={{
-                                        textAlign: 'center'
+                                        textAlign: 'center',
+                                        color: THEME.BLACK_COLOR
                                     }}
                                     itemStyle={{
-                                        backgroundColor: 'black',
+                                        backgroundColor: THEME.WHITE_COLOR,
                                         padding: 10,
                                         borderWidth: 1,
-                                        borderColor: '#999'
+                                        borderColor: THEME.PRIMARY_COLOR_LIGHT,
                                     }}         
-                                    onHandleItemRow={() => Alert.alert('onHandleItemRow')}            
+                                    onHandleItemRow={() => Alert.alert('On Touch Row')}            
                                 />
                             )
                         })
                     }
-                    
-                          
                 </TableBody>
-
             </TableWrap>
             <Text style={{textAlign: 'center', paddingVertical: 20}}>Table - Optimize</Text>
         </ScrollView>
     );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
-  },
-});

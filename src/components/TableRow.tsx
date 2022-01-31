@@ -69,8 +69,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    borderBottomWidth: 1,
-    borderBottomColor: THEME.GRAY_COLOR
   },
 });
 
