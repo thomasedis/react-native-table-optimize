@@ -13,11 +13,11 @@ The package is both **Android** and **iOS** compatible.
 ## Try it out
 
 <kbd>
-  <img height=250 src="https://github.com/thomasedis/react-native-table-optimize/blob/master/src/images/demo_android.gif?raw=true">
+  <img height=600 src="https://github.com/thomasedis/react-native-table-optimize/blob/master/src/images/demo_android.gif?raw=true">
 </kbd>
 
 <kbd>
-  <img height=250 src="https://github.com/thomasedis/react-native-table-optimize/blob/master/src/images/demo_ios.gif?raw=true">
+  <img height=600 src="https://github.com/thomasedis/react-native-table-optimize/blob/master/src/images/demo_ios.gif?raw=true">
 </kbd>
 
 Have a look at the [examples below](https://github.com/thomasedis/react-native-table-optimize/tree/master/example)! :-)
