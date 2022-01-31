@@ -14,7 +14,7 @@ The package is both **Android** and **iOS** compatible.
 
 |                                                                                               |                                                                                           |
 | :-------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------: |
-| ![](https://raw.githubusercontent.com/thomasedis/react-native-table-optimize/master/src/images/demo_android.gif) | ![](https://github.com/thomasedis/react-native-table-optimize/blob/master/src/images/demo_ios.gif?raw=true) |
+| ![](https://github.com/thomasedis/react-native-table-optimize/blob/master/src/images/demo_android.gif?raw=true) | ![](https://github.com/thomasedis/react-native-table-optimize/blob/master/src/images/demo_ios.gif?raw=true) |
 
 Have a look at the [examples below](https://github.com/thomasedis/react-native-table-optimize/tree/master/example)! :-)
 
