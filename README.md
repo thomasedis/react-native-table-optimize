@@ -21,7 +21,6 @@ The package is both **Android** and **iOS** compatible.
 </kbd>
 
 <br/><br/>
-<br/><br/>
 Have a look at the [examples below](https://github.com/thomasedis/react-native-table-optimize/tree/master/example)! :-)
 
 - [Installation](#installation)
@@ -59,6 +58,7 @@ import { TableWrap, TableHead, TableBody, TableRow } from 'react-native-table-op
 | children          |  -      | `React.ReactNode`  | Children. Should be of type `Section`                                                |
 | width             | `100%`  |      `string`      | Length of percentage table with screen size                                          |
 | scrollHorizontal  |  false  |       `bool`       |`Allow horizontal dragging of the table if the length of the board exceeds 100%`      |
+<br/><br/>
 
 ### `TableHead`
 
@@ -68,6 +68,7 @@ import { TableWrap, TableHead, TableBody, TableRow } from 'react-native-table-op
 | itemStyle                 |               -               |  `View.propTypes.style`| These styles will be applied to the box (row - col) in table.       | 
 | dataTitleHead             |               -               |        `array`         | An array of text corresponding to each column heading               |
 | dataSpacing               |               -               |        `array`         | A text array of percentage distances for each column                |
+<br/><br/>
 
 ### `TableBody`
 
@@ -78,6 +79,7 @@ import { TableWrap, TableHead, TableBody, TableRow } from 'react-native-table-op
 | bodyHeight        |  300      | `number`  | Table content height            |
 | bodyStyle        |  _      | `View.propTypes.style`  | These styles will be applied to the content of table            |
 | onRefreshTable        |  _      | `func`  | Listen to refresh table event           |
+<br/><br/>
 
 #### `TableRow`
 
@@ -89,6 +91,7 @@ import { TableWrap, TableHead, TableBody, TableRow } from 'react-native-table-op
 | dataRow        |  _      | `array`  | An array of text corresponding to each column row             |
 | dataSpacing        |  _      | `array`  | A text array of percentage distances for each row             |
 | onHandleItemRow        |  _      | `func`  | Listen to onPress event of item            |
+<br/><br/>
 
 ## Examples
 
