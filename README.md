@@ -92,7 +92,6 @@ import { TableWrap, TableHead, TableBody, TableRow } from 'react-native-table-op
 ## Examples
 
 ```javascript
-...
 import { TableWrap, TableHead, TableBody, TableRow } from 'react-native-table-optimize';
 export default function App() {
 
@@ -157,5 +156,3 @@ export default function App() {
       </ScrollView>
   );
 }
-...
-```
