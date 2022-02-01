@@ -20,6 +20,9 @@ The package is both **Android** and **iOS** compatible.
   <img height=600 src="https://github.com/thomasedis/react-native-table-optimize/blob/master/src/images/demo_ios.gif?raw=true">
 </kbd>
 
+<p></p>
+<p></p>
+<p></p>
 Have a look at the [examples below](https://github.com/thomasedis/react-native-table-optimize/tree/master/example)! :-)
 
 - [Installation](#installation)
