@@ -1,6 +1,6 @@
 {
   "name": "react-native-table-optimize",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Makes it easy to display data in tabular form and you can completely customize it flexibly",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
